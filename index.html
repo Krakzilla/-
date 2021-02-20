@@ -1,65 +1,50 @@
-<!<!DOCTYPE html>
-<html>
-<lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-
-<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-  <title>Mars</title>
-  <style type="text/css">
-    body {margin: 0; padding: 0; background: #000;}
-    canvas { display: block; margin: 0 auto; background: #fff; }
+  <meta charset="utf-8">
+  <title>Fit canvas to viewport for mobile devices</title>
+  <style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  #container {
+    margin: 0 auto;
+    width: 800px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #000;
+    border-radius: 10px;
+    margin-top: 2px;
+  }
+  canvas {
+   display: block;
+  }
   </style>
 </head>
 <body>
-
+  <div id="container">
+    <canvas id="workspace" width="800" height="600"></canvas>
+  </div>
   <script>
-var MARS= {
-  WIDTH: 320,
-  HEIGHT: 480,
-  RATIO: null,
-  currentWidth: null,
-  currentHeight: null,
-  ctx: null,
-
-  init: function() {
-
-  MARS.RATIO = MARS.WIDTH / MARS.HEIGHT;
-  MARS.currentWidth = MARS.WIDTH;
-  MARS.currentHeight = MARS.HEIGHT;
-  MARS.canvas = document.getElementsByTagName('canvas')[0];
-  MARS.canvas.width = MARS.width;
-  MARS.canvas.height = MARS.height;
-  MARS.ctx = MARS.canvas.getContext('2d')
-  MARS.ua = navigator.userAgent.toLowerCase();
-MARS.android = MARS.ua.indexOf('android') > -1 ? true : false;
-MARS.ios = ( MARS.ua.indexOf('iphone') > -1 || MARS.ua.indexOf('ipad') > -1  ) ?
-    true : false;
-  MARS.resize();
-
-},
-
-resize: function() {
-  MARS.currentHeight = window.innerHeight;
-  MARS.currentWidth = MARS.currentHeight * MARS.RATIO;
-  if (MARS.android || MARS.ios) {
-//    document.body.style.height = (window.innerHeight + 50) + 'px';
-    document.body.style.height = (window.innerHeight + 50) + 'px';
-  }
-  MARS.canvas.style.width = MARS.currentWidth + 'px';
-  MARS.canvas.style.height = MARS.currentHeight + 'px';
-
-  window.setTimeout(function) {
-    window.scrollTo(0,1);
-   }, 1);
- }
-};
-
-window.addEventListener('load', MARS.init, false);
-window.addEventListener('resize', MARS,resize, false);
+  (function() {
+    // We are resizing for mobile devices only. For other devices, the
+    // dimensions will be stuck at 800 * 600. To change the default dimensions,
+    // change the height and width of the canvas and the width of the #container
+    var win = window,
+        doc = document,
+        w = win.innerWidth,
+        h = win.innerHeight,
+        container = doc.getElementById('container'),
+        canvas = doc.getElementById('workspace');
+    
+    if( win.navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/i) ) {
+      canvas.height = h;
+      canvas.width  = w;
+      container.style.height = h+"px";
+      container.style.width = w+"px";
+    }
+  })();
   </script>
 </body>
 </html>
