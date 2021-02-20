@@ -1,1 +1,66 @@
-<h1>Ich mag Batterien</h1>
+<!<!DOCTYPE html>
+<html>
+<lang="en">
+<head>
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <title>Mars</title>
+  <style type="text/css">
+    body {margin: 0; padding: 0; background: #000;}
+    canvas { display: block; margin: 0 auto; background: #fff; }
+  </style>
+</head>
+<body>
+
+var MARS= {
+  WIDTH: 320,
+  HEIGHT: 480,
+  RATIO: null,
+  currentWidth: null,
+  currentHeight: null,
+  ctx: null,
+
+  init: function() {
+
+  MARS.RATIO = MARS.WIDTH / MARS.HEIGHT;
+  MARS.currentWidth = MARS.WIDTH;
+  MARS.currentHeight = MARS.HEIGHT;
+  MARS.canvas = document.getElementsByTagName('canvas')[0];
+  MARS.canvas.width = MARS.width;
+  MARS.canvas.height = MARS.height;
+  MARS.ctx = MARS.canvas.getContext('2d')
+  MARS.ua = navigator.userAgent.toLowerCase();
+MARS.android = MARS.ua.indexOf('android') > -1 ? true : false;
+MARS.ios = ( MARS.ua.indexOf('iphone') > -1 || MARS.ua.indexOf('ipad') > -1  ) ?
+    true : false;
+  MARS.resize();
+
+},
+
+resize: function() {
+  MARS.currentHeight = window.innerHeight;
+  MARS.currentWidth = MARS.currentHeight * MARS.RATIO;
+  if (MARS.android || MARS.ios) {
+//    document.body.style.height = (window.innerHeight + 50) + 'px';
+    document.body.style.height = (window.innerHeight + 50) + 'px';
+  }
+  MARS.canvas.style.width = MARS.currentWidth + 'px';
+  MARS.canvas.style.height = MARS.currentHeight + 'px';
+
+  window.setTimeout(function) {
+    window.scrollTo(0,1);
+   }, 1);
+ }
+};
+
+window.addEventListener('load', MARS.init, false);
+window.addEventListener('resize', MARS,resize, false);
+    
+  <script>
+  </script>
+</body>
+</html>
