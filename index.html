@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="height=device-height,initial-scale=1.0"
-    user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0"
+<meta name="viewport" content="height=device-height,initial-scale=1.0",
+    user-scalable=no, maximum-scale=1, user-scalable=0"
 </meta>
 <style>
 canvas {
@@ -11,15 +11,15 @@ canvas {
 }
 </style>
 </head>
-<body onload="startGame()">                          
 <p>owowowowowo</p>
+<body scroll="no" style="overflow: hidden;position: fixed; onload="startGame()">
 <script>
 
-var myGamePiece;
+var player;
 
 function startGame() {
+    player = new component(30, 30, "red", 10, 200);
     myGameArea.start();
-    myGamePiece = new component(30, 30, "red", 10, 120);
 }
 
 var myGameArea = {
@@ -29,6 +29,10 @@ var myGameArea = {
         this.canvas.height = 480;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.interval = setInterval(updateGameArea, 20);
+    },
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
 
@@ -36,12 +40,65 @@ function component(width, height, color, x, y) {
     this.width = width;
     this.height = height;
     this.x = x;
-    this.y = y;
-    ctx = myGameArea.context;
-    ctx.fillStyle = color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    this.y = y;    
+    this.update = function(){
+        ctx = myGameArea.context;
+        ctx.fillStyle = color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+    this.newPos = function() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+    }
 }
 
+function updateGameArea() {
+  myGameArea.clear();
+  myGamePiece.newPos();
+  myGamePiece.update();
+}
+
+function moveup() {
+  player.speedY -= 1;
+}
+
+function movedown() {
+  player.speedY += 1;
+}
+
+function moveleft() {
+  player.speedX -= 1;
+}
+
+function moveright() {
+  player.speedX += 1;
+}
+
+function updateGameArea() {
+    myGameArea.clear();
+    player.update();
+}
+
+/* window.addEventListener('load', () => {
+
+            document.addEventListener('mousedown', startDrawing);
+            document.addEventListener('mouseup', stopDrawing);
+            document.addEventListener('mousemove', Draw);
+
+            document.addEventListener('touchstart', startDrawing);
+            document.addEventListener('touchend', stopDrawing);
+            document.addEventListener('touchcancel', stopDrawing);
+            document.addEventListener('touchmove', Draw);
+            window.addEventListener('resize', resize);
+
+            document.getElementById("x_coordinate").innerText = 0;
+            document.getElementById("y_coordinate").innerText = 0;
+            document.getElementById("speed").innerText = 0;
+            document.getElementById("angle").innerText = 0;
+
+            
+        });
+*/
 </script>
 </body>
 </html>
