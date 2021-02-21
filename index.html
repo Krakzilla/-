@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="height=device-height,initial-scale=1.0",
-    user-scalable=no, maximum-scale=1, user-scalable=0"
-</meta>
+<meta name="viewport" content=height=device-height, initial-scale=1.0, user-scalable="no", initial-scale=1, maximum-scale=1/>
 <style>
 canvas {
     border:1px solid #d3d3d3;
@@ -11,14 +9,14 @@ canvas {
 }
 </style>
 </head>
-<p>owowowowowo</p>
-<body scroll="no" style="overflow: hidden;position: fixed; onload="startGame()">
+<body onload="startGame()">
+<p>XwXwXwXwX</p>
 <script>
 
-var player;
+var myGamePiece;
 
 function startGame() {
-    player = new component(30, 30, "red", 10, 200);
+    myGamePiece = new component(30, 30, "red", 10, 120);
     myGameArea.start();
 }
 
@@ -40,65 +38,37 @@ function component(width, height, color, x, y) {
     this.width = width;
     this.height = height;
     this.x = x;
-    this.y = y;    
+    this.y = y;
     this.update = function(){
         ctx = myGameArea.context;
         ctx.fillStyle = color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
-    this.newPos = function() {
-      this.x += this.speedX;
-      this.y += this.speedY;
-    }
-}
-
-function updateGameArea() {
-  myGameArea.clear();
-  myGamePiece.newPos();
-  myGamePiece.update();
-}
-
-function moveup() {
-  player.speedY -= 1;
-}
-
-function movedown() {
-  player.speedY += 1;
-}
-
-function moveleft() {
-  player.speedX -= 1;
-}
-
-function moveright() {
-  player.speedX += 1;
 }
 
 function updateGameArea() {
     myGameArea.clear();
-    player.update();
+    myGamePiece.x += 1;
+    myGamePiece.update();
 }
+window.addEventListener('load', () => {
 
-/* window.addEventListener('load', () => {
+    document.addEventListener('mousedown', startDrawing);
+    document.addEventListener('mouseup', stopDrawing);
+    document.addEventListener('mousemove', Draw);
 
-            document.addEventListener('mousedown', startDrawing);
-            document.addEventListener('mouseup', stopDrawing);
-            document.addEventListener('mousemove', Draw);
+    document.addEventListener('touchstart', startDrawing);
+    document.addEventListener('touchend', stopDrawing);
+    document.addEventListener('touchcancel', stopDrawing);
+    document.addEventListener('touchmove', Draw);
 
-            document.addEventListener('touchstart', startDrawing);
-            document.addEventListener('touchend', stopDrawing);
-            document.addEventListener('touchcancel', stopDrawing);
-            document.addEventListener('touchmove', Draw);
-            window.addEventListener('resize', resize);
+});
 
-            document.getElementById("x_coordinate").innerText = 0;
-            document.getElementById("y_coordinate").innerText = 0;
-            document.getElementById("speed").innerText = 0;
-            document.getElementById("angle").innerText = 0;
+function startDrawing(event) {
+    myGamePiece = new component(30, 30, "red", 10, 120);
+                          }
 
-            
-        });
-*/
+
 </script>
 </body>
 </html>
