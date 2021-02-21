@@ -1,27 +1,32 @@
-<!DOCTYPE HTML>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width,
-    user-scalable=no, initial-scale=1, maximum-scale=1, user-scalable=0" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-<style type="text/css">
-body { margin: 0; padding: 0; background: #000;}
-canvas { display: block; margin: 0 auto; background: #fff; }
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+canvas {
+    border:1px solid #d3d3d3;
+    background-color: #f1f1f1;
+}
 </style>
-
 </head>
-
-<body>
-
-<canvas> </canvas>
+<body onload="startGame()">
 <script>
 
 var myGamePiece;
 
+function startGame() {
+    myGameArea.start();
+    myGamePiece = new component(30, 30, "red", 10, 120);
+}
+
+var myGameArea = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.canvas.width = 320;
+        this.canvas.height = 480;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+    }
 }
 
 function component(width, height, color, x, y) {
@@ -34,89 +39,9 @@ function component(width, height, color, x, y) {
     ctx.fillRect(this.x, this.y, this.width, this.height);
 }
 
-var POP = {
-
-    // set up some initial values
-    WIDTH: 320,
-    HEIGHT:  480,
-    // we'll set the rest of these
-    // in the init function
-    RATIO:  null,
-    currentWidth:  null,
-    currentHeight:  null,
-    canvas: null,
-    ctx:  null,
-
-    init: function() {
-
-        // the proportion of width to height
-        POP.RATIO = POP.HEIGHT / POP.WIDTH;
-        // these will change when the screen is resized
-        POP.currentWidth = POP.WIDTH;
-        POP.currentHeight = POP.HEIGHT;
-        // this is our canvas element
-        POP.canvas = document.getElementsByTagName('canvas')[0];
-        // setting this is important
-        // otherwise the browser will
-        // default to 320 x 200
-        POP.canvas.width = POP.WIDTH;
-        POP.canvas.height = POP.HEIGHT;
-        // the canvas context enables us to
-        // interact with the canvas api
-        POP.ctx = POP.canvas.getContext('2d');
-
-       POP.ua = navigator.userAgent.toLowerCase();
-       POP.android = POP.ua.indexOf('android') > -1 ? true : false;
-       POP.ios = ( POP.ua.indexOf('iphone') > -1 || POP.ua.indexOf('ipad') > -1  ) ?
-           true : false;
-        // we're ready to resize
-        POP.resize();
-
-    },
-
-    resize: function() {
-
-        POP.currentWidth = window.innerWidth;
-        // resize the width in proportion
-        // to the new height
-        POP.currentHeight = POP.currentWidth * POP.RATIO;
-
-        // this will create some extra space on the
-        // page, allowing us to scroll past
-        // the address bar, thus hiding it.
-        if (POP.android || POP.ios) {
-            document.body.style.height = (window.innerHeight + 50) + 'px';
-        }
-
-        // set the new canvas style width and height
-        // note: our canvas is still 320 x 480, but
-        // we're essentially scaling it with CSS
-        POP.canvas.style.width = POP.currentWidth + 'px';
-        POP.canvas.style.height = POP.currentHeight + 'px';
-
-        // we use a timeout here because some mobile
-        // browsers don't fire if there is not
-        // a short delay
-        window.setTimeout(function() {
-                window.scrollTo(0,1);
-        }, 1);
-    }
-
-};
-    
-    POP.Draw = {
-    myGamePiece = new component(30, 30, "red", 10, 120);
-}
-
-
-window.addEventListener('load', POP.init, false);
-window.addEventListener('resize', POP.resize, false);
-
-  
-}
- 
-    
 </script>
+
+<p>We have added a component to our game, a red square!</p>
 
 </body>
 </html>
