@@ -15,15 +15,13 @@ canvas { display: block; margin: 0 auto; background: #fff; }
 
 </head>
 
-<body onload="startGame">
+<body>
 
 <canvas> </canvas>
 <script>
 
 var myGamePiece;
 
-function startGame() {
-    myGamePiece = new component(30, 30, "red", 10, 120);
 }
 
 function component(width, height, color, x, y) {
@@ -105,10 +103,20 @@ var POP = {
     }
 
 };
+    
+    POP.Draw = {
+    myGamePiece = new component(30, 30, "red", 10, 120);
+}
+
 
 window.addEventListener('load', POP.init, false);
 window.addEventListener('resize', POP.resize, false);
 
+       POP.Draw = {
+    myGamePiece = new component(30, 30, "red", 10, 120);
+}
+ 
+    
 </script>
 
 </body>
