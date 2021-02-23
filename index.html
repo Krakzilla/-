@@ -13,6 +13,11 @@ canvas {
 <p>XwXwXwXwX</p>
 <script>
 
+ function noScroll() {
+  window.scrollTo(0, 0);}
+window.addEventListener('scroll', noScroll);
+window.removeEventListener('scroll', noScroll);   
+    
 var myGamePiece;
 var showStick;
 
