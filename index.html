@@ -13,17 +13,8 @@ canvas {
 <p>XwXwXwXwX</p>
 <script>
 
-function noScroll() {
-  window.scrollTo(0, 0);
-}
-
-// add listener to disable scroll
-window.addEventListener('scroll', noScroll);
-
-// Remove listener to re-enable scroll
-window.removeEventListener('scroll', noScroll);
-    
 var myGamePiece;
+var showStick;
 
 function startGame() {
     myGamePiece = new component(30, 30, "red", 10, 120);
@@ -56,10 +47,22 @@ function component(width, height, color, x, y) {
     }
 }
 
+function circle(x, y, r, color) {
+  this.update = function(){
+    ctx = myGameArea.context;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x + 5, y + 5, r, 0, Math.PI * 2, true);
+    ctx.closePath();
+    ctx.fill()
+   }
+  }
+
 function updateGameArea() {
     myGameArea.clear();
     myGamePiece.x += 1;
     myGamePiece.update();
+    showStick.update();
 }
 window.addEventListener('load', () => {
 
@@ -75,8 +78,28 @@ window.addEventListener('load', () => {
 });
 
 function startDrawing(event) {
+  let coord = { x: 0, y: 0 };
+   var mouse_x = event.clientX || event.touches[0].clientX;
+   var mouse_y = event.clientY || event.touches[0].clientY;
+          coord.x = mouse_x; // - canvas.offsetLeft;
+          coord.y = mouse_y; //- canvas.offsetTop;
+
+    showStick = new circle (coord.x, coord.y, 30, "rgb(204, 230, 255)");
+  }
+
+function stopDrawing(event) {
+document.addEventListener('touchstart', startDrawing);
+
+}
+
+function getPosition(event) {
+   let coord = { x: 0, y: 0 };
     myGamePiece = new component(30, 30, "red", 10, 120);
-                          }
+    var mouse_x = event.clientX || event.touches[0].clientX;
+    var mouse_y = event.clientY || event.touches[0].clientY;
+    coord.x = mouse_x - canvas.offsetLeft;
+    coord.y = mouse_y - canvas.offsetTop;
+}
 
 
 </script>
