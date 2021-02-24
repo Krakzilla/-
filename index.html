@@ -10,16 +10,15 @@ canvas {
 </style>
 </head>
 <body onload="startGame()">
-<p>XwXwXwXwX</p>
+<p id="info">XwXwXwXwX</p>
 <script>
 
- function noScroll() {
-  window.scrollTo(0, 0);}
-window.addEventListener('scroll', noScroll);
-window.removeEventListener('scroll', noScroll);   
-    
 var myGamePiece;
 var showStick;
+
+function info(message){
+  document.getElementById("info").innerHTML = message;
+}
 
 function startGame() {
     myGamePiece = new component(30, 30, "red", 10, 120);
@@ -29,16 +28,20 @@ function startGame() {
 var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
-        this.canvas.width = 320;
-        this.canvas.height = 480;
+      let scale = (window.innerWidth / 320)
+      info(scale)
+        this.canvas.width = (320*scale);
+        this.canvas.height = (480*scale);
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.context.scale((window.innerWidth / 320), (window.innerWidth / 320));
         this.interval = setInterval(updateGameArea, 20);
     },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
+
 
 function component(width, height, color, x, y) {
     this.width = width;
@@ -83,12 +86,12 @@ window.addEventListener('load', () => {
 });
 
 function startDrawing(event) {
-  let coord = { x: 0, y: 0 };
-   var mouse_x = event.clientX || event.touches[0].clientX;
-   var mouse_y = event.clientY || event.touches[0].clientY;
-          coord.x = mouse_x; // - canvas.offsetLeft;
-          coord.y = mouse_y; //- canvas.offsetTop;
-
+ let coord = { x: 0, y: 0 };
+ let paint = false;
+  var mouse_x = event.clientX || event.touches[0].clientX;
+  var mouse_y = event.clientY || event.touches[0].clientY;
+//  coord.x = mouse_x - myGameArea.offsetLeft;
+//  coord.y = mouse_y - myGameArea.offsetTop;
     showStick = new circle (coord.x, coord.y, 30, "rgb(204, 230, 255)");
   }
 
