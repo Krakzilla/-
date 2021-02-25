@@ -4,7 +4,7 @@
 <meta name="viewport" content=height=device-height, initial-scale=1.0, initial-scale=1, maximum-scale=1/>
 <style>
 canvas {
-  margin-top: 30px;
+  margin-top: 10px;
   border:1px solid #d3d3d3;
   background-color: #f6f9f1;
 }
@@ -19,7 +19,7 @@ overflow: hidden;
 
 var myGamePiece;
 var showStick;
-var scale = (window.innerWidth / 330);
+var scale = (window.innerWidth / 320);
 
 function info(message){
   document.getElementById("info").innerHTML = message;
@@ -35,8 +35,8 @@ var myGameArea = {
     start : function() {
       info(scale)
       document.body.style.height = (window.innerHeight + 50)
-        this.canvas.width = (320*scale);
-        this.canvas.height = (480*scale);
+        this.canvas.width = (320*(window.innerWidth / 330));
+        this.canvas.height = (480*(window.innerWidth / 330));
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.context.scale((window.innerWidth / 320), (window.innerWidth / 320));
@@ -65,7 +65,7 @@ function circle(x, y, r, color) {
     ctx = myGameArea.context;
     ctx.fillStyle = color;
     ctx.beginPath();
-    ctx.arc(x + 5, y + 5, r, 0, Math.PI * 2, true);
+    ctx.arc(x, y, r, 0, Math.PI * 2, true);
     ctx.closePath();
     ctx.fill()
    }
@@ -95,8 +95,8 @@ function startDrawing(event) {
  let paint = false;
   var mouse_x = event.clientX || event.touches[0].clientX;
   var mouse_y = event.clientY || event.touches[0].clientY;
-coord.x = mouse_x - myGameArea.canvas.offsetLeft;
-coord.y = mouse_y - myGameArea.canvas.offsetTop;
+coord.x = mouse_x /scale - myGameArea.canvas.offsetLeft;
+coord.y = mouse_y /scale - myGameArea.canvas.offsetTop;
     showStick = new circle (coord.x, coord.y, 30, "rgb(204, 230, 255)");
     info(myGameArea.canvas.offsetTop);
   }
