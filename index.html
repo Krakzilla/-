@@ -111,6 +111,9 @@ move = { x: ((event.clientX || event.touches[0].clientX) - myGameArea.canvas.off
 }
 
 function mouse() {
+  ctx.beginPath();
+      ctx.arc(move.x, move.y, 4, 0, Math.PI * 2, true);
+      ctx.closePath();
   this.update = function(event){
 
 //maximum für joystick
