@@ -64,6 +64,7 @@ function component(width, height, color, x, y) {
     this.input = function(x, y){
       this.x = this.x + x;
       this.y = this.y + y;
+      info("move");
   // Rand  if(this.x>)
     }
     }
@@ -82,19 +83,19 @@ function circle(r, color) {
 
 window.addEventListener('load', () => {
 
+    document.addEventListener('mousemove', getCoords);
     document.addEventListener('mousedown', startDrawing);
     document.addEventListener('mouseup', stopDrawing);
-    document.addEventListener('mousemove', getCoords);
 
+    document.addEventListener('touchmove', getCoords);
     document.addEventListener('touchstart', startDrawing);
     document.addEventListener('touchend', stopDrawing);
     document.addEventListener('touchcancel', stopDrawing);
-    document.addEventListener('touchmove', getCoords);
+
 
 });
 
 function startDrawing() {
-  info("first");
 paint = true;
   var mouse_x = event.clientX || event.touches[0].clientX;
   var mouse_y = event.clientY || event.touches[0].clientY;
@@ -105,15 +106,14 @@ beginning.y = (mouse_y - myGameArea.canvas.offsetTop)/scale;
   }
 
 function getCoords(event) {
-  info(event.clientX);
 move = { x: ((event.clientX || event.touches[0].clientX) - myGameArea.canvas.offsetLeft)/scale,
  y: ((event.clientY || event.touches[0].clientY) - myGameArea.canvas.offsetTop)/scale};
 }
 
 function mouse() {
   ctx.beginPath();
-      ctx.arc(move.x, move.y, 4, 0, Math.PI * 2, true);
-      ctx.closePath();
+  ctx.arc(beginning.x, beginnning.y, 4, 0, Math.PI * 2, true);
+  ctx.closePath();
   this.update = function(event){
 
 //maximum für joystick
