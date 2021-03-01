@@ -114,6 +114,8 @@ function mouse() {
   ctx.beginPath();
   ctx.arc(beginning.x, beginning.y, 4, 0, Math.PI * 2, true);
   ctx.closePath();
+  move.x = beginning.x;
+  move.y = beginning.y;
   this.update = function(event){
 
 //maximum für joystick
