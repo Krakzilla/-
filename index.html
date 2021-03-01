@@ -94,6 +94,7 @@ window.addEventListener('load', () => {
 });
 
 function startDrawing() {
+  info("first");
 paint = true;
   var mouse_x = event.clientX || event.touches[0].clientX;
   var mouse_y = event.clientY || event.touches[0].clientY;
@@ -104,13 +105,13 @@ beginning.y = (mouse_y - myGameArea.canvas.offsetTop)/scale;
   }
 
 function getCoords(event) {
+  info(event.clientX);
 move = { x: ((event.clientX || event.touches[0].clientX) - myGameArea.canvas.offsetLeft)/scale,
  y: ((event.clientY || event.touches[0].clientY) - myGameArea.canvas.offsetTop)/scale};
 }
 
 function mouse() {
   this.update = function(event){
-    info(beginning.x);
 
 //maximum für joystick
 
