@@ -24,15 +24,28 @@ var scale = (window.innerWidth / 320);
 var paint = false;
 var move = {x: 0, y: 0};
 var beginning = {x: 0, y: 0};
+var obstacles = [];
 
 function info(message){
   document.getElementById("info").innerHTML = message;
 }
-
 function startGame() {
+  //let level = (1);
+  myGamePiece = new component(30, 30, "red", 10, 120);
+  myGameArea.start();
+//  levelOne();
+}
+
+/*function levelOne() {
+  let nextEvent = (0)
+  let bauplanListe = new Array(5, 400, 450)
     myGamePiece = new component(30, 30, "red", 10, 120);
     myGameArea.start();
-}
+
+  this.update = function(){
+    //if (myGameArea.frameNo = bauplan[nextEvent])
+info(bauplan[nextEvent]);
+}}*/
 
 var myGameArea = {
     canvas : document.createElement("canvas"),
@@ -44,6 +57,7 @@ var myGameArea = {
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.context.scale((window.innerWidth / 320), (window.innerWidth / 320));
+        this.frameNo = 0;
         this.interval = setInterval(updateGameArea, 20);
     },
     clear : function() {
@@ -51,6 +65,17 @@ var myGameArea = {
     }
 }
 
+function blocks(width, height, color, x, y) {
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y;
+    this.update = function(){
+        ctx = myGameArea.context;
+        ctx.fillStyle = color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+        info("servus");
+      }}
 
 function component(width, height, color, x, y) {
     this.width = width;
@@ -61,23 +86,36 @@ function component(width, height, color, x, y) {
         ctx = myGameArea.context;
         ctx.fillStyle = color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
+
     this.input = function(x, y){
       this.x = this.x + x;
       this.y = this.y + y;
-      info("move");
-  // Rand  if(this.x>)
+  if (this.x<0) {
+    this.x = 0
+  } else {
+    if (this.x>280) {
+      this.x = 280}
+  }
+  if (this.y<0) {
+    this.y = 0
+  } else {
+    if (this.y>435) {
+      this.y = 435}
+  }
+
     }
-    }
-}
+    }}
 
 function circle(r, color) {
   this.update = function(){
+    ctx.globalAlpha = 0.5; // set global alpha
     ctx = myGameArea.context;
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(beginning.x, beginning.y, r, 0, Math.PI * 2, true);
     ctx.closePath();
     ctx.fill()
+    ctx.globalAlpha = 1;
    }
   }
 
@@ -117,16 +155,39 @@ function mouse() {
   move.x = beginning.x;
   move.y = beginning.y;
   this.update = function(event){
+    let change = { x: (move.x-beginning.x)/7, y: (move.y-beginning.y)/7 };
 
-//maximum für joystick
+/*if () {
 
-    myGamePiece.input((move.x-beginning.x)/(scale*10), (move.y-beginning.y)/(scale*10));
+} else {
+
+}
+*/
+if (change.x > 8){
+change.x = 8
+move.x = 56+beginning.x
+} else {
+  if (change.x < -8){
+  change.x = -8
+  }
+}
+if (change.y > 8){
+change.y = 8
+move.y = 56+beginning.y
+} else {
+  if (change.y < -8){
+  change.y = -8
+  }
+}
+
+    myGamePiece.input(change.x, change.y);
       ctx = myGameArea.context;
       ctx.fillStyle = "rgb(0, 0, 0)";
       ctx.beginPath();
       ctx.arc(move.x, move.y, 4, 0, Math.PI * 2, true);
       ctx.closePath();
       ctx.fill();
+      //info(move.x-beginning.x);
       }}
 
 
@@ -141,6 +202,8 @@ function updateGameArea() {
   if (paint) {
     showStick.update();
     drawMouse.update();
+  //  myGameArea.frameNo += 1;
+
   }
 
 }
