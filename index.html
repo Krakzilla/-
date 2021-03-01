@@ -17,14 +17,15 @@ overflow: hidden;
 <p id="info">XwXwXwXwX</p>
 <script>
 
+var obstacleOne;
 var myGamePiece;
 var showStick;
 var showMouse;
+var gelaber;
 var scale = (window.innerWidth / 320);
 var paint = false;
 var move = {x: 0, y: 0};
 var beginning = {x: 0, y: 0};
-var obstacles = [];
 
 function info(message){
   document.getElementById("info").innerHTML = message;
@@ -33,6 +34,8 @@ function startGame() {
   //let level = (1);
   myGamePiece = new component(30, 30, "red", 10, 120);
   myGameArea.start();
+  obstacleOne = new ding(200, 200, "green", 100, 0, 1);
+  gelaber = new nachricht("happy birtday yay");
 //  levelOne();
 }
 
@@ -63,19 +66,46 @@ var myGameArea = {
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
+
 }
 
-function blocks(width, height, color, x, y) {
+function nachricht(inhalt) {
+
+this.update = function(){
+  ctx = myGameArea.context;
+  ctx.font = ("lato");
+  ctx.fillText(inhalt,100,100)
+}
+}
+
+
+function ding(width, height, color, x, y, speed) {
     this.width = width;
     this.height = height;
     this.x = x;
     this.y = y;
+    this.speed = (speed);
     this.update = function(){
+        this.y = this.y + this.speed;
         ctx = myGameArea.context;
         ctx.fillStyle = color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
-        info("servus");
-      }}
+
+        if (this.y<(myGamePiece.y+25)){
+         if (this.y+this.height>myGamePiece.y)
+        {
+          if (this.x<(myGamePiece.x+25)){
+           if (this.x+this.width>myGamePiece.x)
+          {
+      //collision
+              myGameArea.interval = clearInterval(myGameArea.interval);
+          }
+        }
+        }
+      }
+
+    }
+}
 
 function component(width, height, color, x, y) {
     this.width = width;
@@ -190,7 +220,6 @@ move.y = 56+beginning.y
       //info(move.x-beginning.x);
       }}
 
-
 function stopDrawing(event) {
 paint = false;
 }
@@ -199,14 +228,20 @@ paint = false;
 function updateGameArea() {
     myGameArea.clear();
     myGamePiece.update();
-  if (paint) {
+    myGameArea.frameNo += 1;
+  if (myGameArea.frameNo === 480) {
+    info(myGameArea.frameNo);
+    obstacleOne = new ding(200, 200, "green", 100, -200, 1);
+  }
+  //  gelaber = new nachricht("na du hübscher");
+    obstacleOne.update();
+    gelaber.update();
+    if (paint) {
     showStick.update();
     drawMouse.update();
-  //  myGameArea.frameNo += 1;
-
   }
-
 }
+
 </script>
 </body>
 </html>
