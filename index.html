@@ -14,7 +14,7 @@ overflow: hidden;
 </style>
 </head>
 <body {margin: 0; height: 100%; overflow: hidden} onload="startGame()">
-<p id="info">XwXwXwXwX</p>
+<p id="info"></p>
 <script>
 
 var obstacleOne;
@@ -73,8 +73,8 @@ var myGameArea = {
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.context.scale((window.innerWidth / 320), (window.innerWidth / 320));
 
-this.frameNo = 0;
- stelle = 0//STARTPUNKT (800|5) (1320|11) (15|1700) (26|2350) (32|3000) (3998|40)
+this.frameNo = 3000;
+ stelle = 32//STARTPUNKT (800|5) (1320|11) (15|1700) (26|2350) (32|3000) (3998|40)
 
         this.interval = setInterval(updateGameArea, 20);
     },
@@ -126,10 +126,11 @@ this.update = function(){
     myGameArea.clear();
     myGameArea.interval = clearInterval(myGameArea.interval);
     inhalt = "Reload if you wanna try again";
+    inhaltZwei = ("  exactly "+((myGameArea.frameNo / 4000)*100)+"% done");
     if (type === "ende") {
       info("https://youtu.be/7YFfV2ELy4g");
       inhalt = ("EpiC LiNk bELoW cAnvaS");
-    }
+    } else {type=2}
   }
   }
     ctx.fillStyle = "black";
