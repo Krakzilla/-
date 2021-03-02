@@ -112,8 +112,8 @@ this.update = function(){
     myGameArea.interval = clearInterval(myGameArea.interval);
     inhalt = "Reload if you wanna try again";
     
-  info(localStorage.getItem('stage'));
-    localStorage.setItem('stage', move.x);
+  info(SessionStorage.getItem('stage'));
+    SessionStorage.setItem('stage', move.x);
 
   }
   } else {
