@@ -17,8 +17,6 @@ overflow: hidden;
 <p id="info">XwXwXwXwX</p>
 <script>
 
- localStorage.setItem('stage','3');
-  info(localStorage.getItem('stage'));
   
 var obstacleOne;
 var obstacleTwo;
@@ -44,7 +42,7 @@ function startGame() {
 
   myGamePiece = new component(30, 30, "red", 10, 120);
   myGameArea.start();
-  gelaber = new nachricht("happy birthday ... Yay");
+  gelaber = new nachricht("happy birthday ... Yay!");
 
   obstacleOne = new dang ("u", 20, 20, "blue", 20, 20);
   obstacleTwo = new dang ("u", 20, 20, "blue", 20, 20);
@@ -113,6 +111,9 @@ this.update = function(){
     myGameArea.clear();
     myGameArea.interval = clearInterval(myGameArea.interval);
     inhalt = "Reload if you wanna try again";
+    
+  info(localStorage.getItem('stage'));
+    localStorage.setItem('stage','3');
 
   }
   } else {
