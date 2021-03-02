@@ -116,7 +116,10 @@ this.update = function(){
 
 }}
   }
-  if (effect) { if (textpos.y<800) {
+  if (effect) { 
+    myGameArea.clear();
+      myGameArea.interval = clearInterval(myGameArea.interval);
+    if (textpos.y<800) {
     textpos.x = textpos.x - inhaltZwei;
     textpos.y = textpos.y + (inhaltZwei/14);
   } else {
@@ -126,10 +129,8 @@ this.update = function(){
     myGameArea.interval = clearInterval(myGameArea.interval);
     inhalt = "Reload if you wanna try again";
     if (type === "ende") {
-      info("ende");
-      myGameArea.clear();
-      myGameArea.interval = clearInterval(myGameArea.interval);
-      inhalt = ("https://youtu.be/7YFfV2ELy4g");
+      info("https://youtu.be/7YFfV2ELy4g");
+      inhalt = ("EpiC LiNk bELoW cAnvaS");
     }
   }
   }
