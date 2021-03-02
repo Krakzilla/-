@@ -17,7 +17,6 @@ overflow: hidden;
 <p id="info">XwXwXwXwX</p>
 <script>
 
-  
 var obstacleOne;
 var obstacleTwo;
 var myGamePiece;
@@ -31,42 +30,31 @@ var beginning = {x: 0, y: 0};
 var zeitArray = new Array();
 var stelle;
 var infoArray = new Array();
-startGame.level = (1)
+var gamelevel;
 
 function info(message){
   document.getElementById("info").innerHTML = message;
 }
+
 function startGame() {
-  this.level = (1);
+/*  if (SessionStorage.getItem('stage')>3) {
+   this.level = (4); }
+   else { this.level = (1);} */
+gamelevel = (1);  //online durch SessionStorage ersetzen
 //  levelOne();
 
   myGamePiece = new component(30, 30, "red", 10, 120);
   myGameArea.start();
-  gelaber = new nachricht("happy birthday ... Yay!");
+  gelaber = new nachricht("Don't touch the boxes", 0, false, 100, 250);
 
-  obstacleOne = new dang ("u", 20, 20, "blue", 20, 20);
-  obstacleTwo = new dang ("u", 20, 20, "blue", 20, 20);
-
-if (level === 1) {
+  obstacleOne = new dang ();
+  obstacleTwo = new dang ();
   stelle = (0);
-  zeitArray.push(1,200,300);
-  infoArray.push("a", "u", 200, 200, "blue", 100, -200, 1, "i", "u", 200, 200, "red", 100, -200, 1);
-  info(infoArray);
-} else {
-  if (level === 2) {
-    stelle = (0);
-    zeitArray = (2,400,600);
-    infoArray = ((200, 200, "green", 100, 0, 1), (200, 200, "blue", 100, 0, 1));
-  } else {
-    if (level === 3) {
-      stelle = (0);
-      zeitArray = (2,400,600);
-      infoArray = ((200, 200, "green", 100, 0, 1), (200, 200, "blue", 100, 0, 1));
-    } else {
-      info("upsala");
+
+    zeitArray.push(1,80,300,390,600,810);
+    infoArray.push("a","o",200,180,"red",100,-200,1, "i","o",100,200,"blue",0,-200,2.2, "t", "t", 200, 200, "Heyyy",150,200, 1, "i", "o", 100, 200, "blue", 70, -200, 1.5, "a","o",180,100,"red",0,-100,1, "t","t",130,200,"Happy Birthdayyy",100,200,1,);
   }
-}
-}}
+
 
 
 
@@ -89,10 +77,14 @@ var myGameArea = {
 
 }
 
-function nachricht(inhalt, type, effect) {
-  let textpos = {x: 100, y: 300};
+function nachricht(inhalt, type, effect, x, y) {
+  let textpos = {x: x, y: y};
   if (effect) {
 textpos.y = 200;
+  }
+
+  if (type === "oben") {
+    textpos = {x: 60, y: 60};
   }
 
 this.update = function(){
@@ -100,7 +92,7 @@ this.update = function(){
   if (type==="fail") {
   ctx.font = "300px Times New Roman";
   } else {
-  ctx.font = "10px Lato";
+  ctx.font = "20px Lato";
   }
   if (effect) { if (textpos.y<800) {
     textpos.x = textpos.x - 60;
@@ -111,9 +103,9 @@ this.update = function(){
     myGameArea.clear();
     myGameArea.interval = clearInterval(myGameArea.interval);
     inhalt = "Reload if you wanna try again";
-    
-  info(SessionStorage.getItem('stage'));
-    SessionStorage.setItem('stage', move.x);
+
+    /* info(SessionStorage.getItem('stage'));
+        SessionStorage.setItem('stage', move.x); */
 
   }
   } else {
@@ -132,7 +124,13 @@ function ding(type, width, height, color, x, y, speed) {
     this.y = y;
     this.speed = (speed);
     this.update = function(){
+      if (type === "o") {
         this.y = this.y + this.speed;
+      } else {
+       if (this.x !== speed) {
+         this.y = this.y + 5;
+       }
+      }
         ctx = myGameArea.context;
         ctx.fillStyle = color;
         ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -146,7 +144,7 @@ function ding(type, width, height, color, x, y, speed) {
       //collision
       info("bum");
               myGameArea.interval = clearInterval(myGameArea.interval);
-              gelaber = new nachricht("WHOOooooOoOPS", "fail", true);
+              gelaber = new nachricht("WHOOooooOoOPS", "fail", true, 0, 0);
               extrainterval();
           }
         }
@@ -177,7 +175,7 @@ function dang(type, width, height, color, x, y, speed) {
       //collision
       info("bum");
               myGameArea.interval = clearInterval(myGameArea.interval);
-              gelaber = new nachricht("WHOOoooOOOOPS", "fail", true);
+              gelaber = new nachricht("WHOOoooOOOOPS", "fail", true, 0, 0);
               extrainterval();
           }
         }
@@ -309,15 +307,23 @@ function updateGameArea() {
     myGameArea.clear();
     myGamePiece.update();
     myGameArea.frameNo += 1;
+    info(myGameArea.frameNo);
   if (myGameArea.frameNo === zeitArray[stelle]) {
-    if ((infoArray[(stelle*8)])=== "i") {
-      info("ding");
+
+    info("hallo");
+
+
+if ((infoArray[(stelle*8)])=== "i") {
+
       obstacleOne = new ding((infoArray[(stelle*8)+1]), (infoArray[(stelle*8)+2]), (infoArray[(stelle*8)+3]), (infoArray[(stelle*8)+4]), (infoArray[(stelle*8)+5]), (infoArray[(stelle*8)+6]), (infoArray[(stelle*8)+7]));
     } else {
       if ((infoArray[(stelle*8)])=== "a") {
-        info("dang");
         obstacleTwo = new dang((infoArray[(stelle*8)+1]), (infoArray[(stelle*8)+2]), (infoArray[(stelle*8)+3]), (infoArray[(stelle*8)+4]), (infoArray[(stelle*8)+5]), (infoArray[(stelle*8)+6]), (infoArray[(stelle*8)+7]));
     }
+    if ((infoArray[(stelle*8)])=== "t") {
+      gelaber = new nachricht((infoArray[(stelle*8)+4]), "custom", false, (infoArray[(stelle*8)+5]), (infoArray[(stelle*8)+6]));
+    }
+
   }
 
     stelle += 1;
