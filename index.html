@@ -74,8 +74,8 @@ var myGameArea = {
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.context.scale((window.innerWidth / 320), (window.innerWidth / 320));
 
-this.frameNo = 0;
- stelle = 0//STARTPUNKT (800|5) (1320|11) (15|1700) (26|2350) (32|3000)
+this.frameNo = 3998;
+ stelle = 40//STARTPUNKT (800|5) (1320|11) (15|1700) (26|2350) (32|3000) (3998|40)
 
         this.interval = setInterval(updateGameArea, 20);
     },
@@ -84,13 +84,14 @@ this.frameNo = 0;
     }
 
 }
+
 myGameArea.canvas.selection=  false;
 
 function nachricht(inhalt, type, effect, x, y, inhaltZwei) {
   let textpos = {x: x, y: y};
   this.type = type
   if (effect) {
-textpos.y = 200;
+textpos.y = 150;
   }
 
   if (type === "oben") {
@@ -103,7 +104,17 @@ this.update = function(){
   ctx.font = "300px Times New Roman";
   } else {
   ctx.font = "20px Lato";
-  if (type=== "ende") {ctx.font = "250px Times New Roman";}
+  if (type=== "ende") {ctx.font = "250px Times New Roman";
+  if (textpos.y<800) {
+    textpos.x = textpos.x  -20;
+    textpos.y = textpos.y + 0.8;
+  } else {
+    textpos = {x: 35, y: 220};
+    ctx.font = "20px Lato";
+    myGameArea.clear();
+    myGameArea.interval = clearInterval(myGameArea.interval);
+
+}}
   }
   if (effect) { if (textpos.y<800) {
     textpos.x = textpos.x - inhaltZwei;
@@ -114,19 +125,15 @@ this.update = function(){
     myGameArea.clear();
     myGameArea.interval = clearInterval(myGameArea.interval);
     inhalt = "Reload if you wanna try again";
-
-    /* info(SessionStorage.getItem('stage'));
-        SessionStorage.setItem('stage', move.x); */
-
+    if (type === "ende") {
+      info("ende");
+      myGameArea.clear();
+      myGameArea.interval = clearInterval(myGameArea.interval);
+      inhalt = ("https://youtu.be/7YFfV2ELy4g");
+    }
   }
-  } else {
-
   }
-  if (this.type === "danger") {
-    ctx.fillStyle = "red";
-  } else {
     ctx.fillStyle = "black";
-  }
   ctx.fillText(inhalt,textpos.x,textpos.y)
   if (type > 1) {
     ctx.fillText(inhaltZwei,textpos.x,(textpos.y+20));
