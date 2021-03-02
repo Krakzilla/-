@@ -116,9 +116,8 @@ this.update = function(){
 
 }}
   }
-  if (effect) { 
-    myGameArea.clear();
-      myGameArea.interval = clearInterval(myGameArea.interval);
+  if (effect) {
+    obstacleOne.x = -200
     if (textpos.y<800) {
     textpos.x = textpos.x - inhaltZwei;
     textpos.y = textpos.y + (inhaltZwei/14);
@@ -166,7 +165,7 @@ function ding(type, width, height, color, x, y, speed) {
            if (this.x+this.width>myGamePiece.x)
           {
       //collision
-      info("bum");
+      info(((myGameArea.frameNo / 4000)*100)+"% done!");
               myGameArea.interval = clearInterval(myGameArea.interval);
               gelaber = new nachricht("WHOOooooOoOPS", "fail", true, 0, 0, 50);
               extrainterval();
@@ -201,7 +200,7 @@ function dang(type, width, height, color, x, y, speed) {
            if (this.x+this.width>myGamePiece.x)
           {
       //collision
-      info("bum");
+      info(((myGameArea.frameNo / 4000)*100)+"% done!");
               myGameArea.interval = clearInterval(myGameArea.interval);
               gelaber = new nachricht("WHOOoooOOOOPS", "fail", true, 0, 0, 50);
               extrainterval();
