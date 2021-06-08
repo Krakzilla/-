@@ -1,0 +1,22 @@
+@media screen and (orientation:portrait) {
+.backgrounds {
+    width: 100%;
+    height: auto;
+    /* position: fixed;*/
+  }}
+@media screen and (orientation:landscape) {
+.backgrounds {
+    height: 100%;
+    width: auto;
+    position: fixed;
+    padding-left: 50px;
+  }}
+
+.figur {
+  position: absolute;
+}
+
+p {
+    border: 3px solid rgb(170, 191, 202);
+    margin: 20px;
+}
