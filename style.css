@@ -25,14 +25,12 @@
 
 p {
     border: 3px solid rgb(170, 191, 202);
-    margin: 20px;
 }
 
 .textbox {
   position: sticky;
-  bottom: 20px;
-  color:saddlebrown;
-  padding: 20px;
+  bottom:1px;
+  padding:20px;
   border-radius: 3px;
   background: rgb(184, 221, 175);
   border: 5px solid black;
