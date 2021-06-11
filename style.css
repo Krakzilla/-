@@ -35,3 +35,12 @@ p {
   background: rgb(184, 221, 175);
   border: 5px solid black;
 }
+
+button {
+  font-size: 20px;
+  margin: 4px 2px;
+  position:relative;
+  top: -100px;
+  left: -12px;
+  background: white;
+}
