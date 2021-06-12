@@ -19,11 +19,11 @@
      user-select: none;
   }}
 .stage {
- position: relative; 
+ /*position: relative;*/ 
 }
 
 .figur {
-  position:relative;
+  position:absolute;
   bottom: 155px;
   left: -12px;
   
@@ -50,5 +50,5 @@ button {
   position:relative;
   top: -100px;
   left: -12px;
-  background: yellow;
+  background: white;
 }
