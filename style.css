@@ -23,19 +23,17 @@ user-select: none;
 
 .figur {
   position:absolute;
-  bottom: 155px;
-  left: -12px;
-  opacity: 0.5;
-  
+  top: 20%;
+  left: 15%;
   z-index: 2;
+  width: 70%;
+  height: auto;
 }
 
 p2 {
   position:absolute;
   top: 25px;
 }
-
-p {z-index: 4;}
 
 .textbox {
   font-family: 'Lato', sans-serif;
