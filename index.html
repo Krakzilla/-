@@ -15,7 +15,7 @@
 <p id="oben">Ich glaub es geht los.</p>
  <div class="stage">
   <img class="backgrounds" src="feet.jpg" width: 100%; height: 100%;>
-  <img class="figur" src="sprite.png";>
+  <img class="figur" id="figur" src="sprite.png";>
 </div>
  <div class="textbox">
   <p2 id="box" >HUHUHU</p2>
@@ -25,16 +25,22 @@
     border-radius: 3px;
     background: rgb(184, 221, 175);
     border: 5px solid black;</style></p>
-     <button id="butt" onclick="writeText()">>>></button>
+     <button id="butt" onclick="weiter()">>>></button>
    
  </div></div>
 
 <script>
   document.getElementById("oben").innerHTML = window.innerWidth+" "+window.innerHeight;
 
+  let regie = [1, 2, 2, 2, 3, 2];
+  let inhalt = ["As you can see, these are some delicious feet. ", "I like them a lot. ", "in fact", ", I wanna spit on them ", ":)"];
+  let textnummer = [0];
+  let regienummer = [0];
+
   var i = 0
-  const txt = 'As you can see, these are some fine feet. I like them a lot. Abcdefg hijklmnopqrstuvwxy zhahaha hahahah ahahaha hahahahaha';
+  var txt = "nix";
   const speed = 15;
+
   function type() {
    if (i < txt.length) {
      document.getElementById("box").innerHTML += txt.charAt(i);
@@ -49,12 +55,25 @@
     document.getElementById("box").innerHTML = "" ;
   }
   function writeText() {
-
     document.getElementById("butt").style.background="white";
     document.getElementById("butt").disabled = true;
-    document.getElementById("box").innerHTML = "" ;
     i = 0;
     type();
+  }
+  function weiter() {
+    document.getElementById("oben").innerHTML = regie[regienummer];
+  if (regie[regienummer] < 2) {
+    txt = inhalt[textnummer]; textnummer ++;
+    document.getElementById("box").innerHTML = "" ;
+    regienummer ++;
+    writeText();
+  } else {
+    if (regie[regienummer] < 3) {
+      txt = inhalt[textnummer]; textnummer ++;
+    regienummer ++;
+    writeText();
+    } else {document.getElementById('figur').src='transparents.png'}} 
+   
   }
 </script>
 </body>
