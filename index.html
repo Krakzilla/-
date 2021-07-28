@@ -18,22 +18,33 @@
   <img class="figur" id="figur" src="sprite.png";>
 </div>
  <div class="textbox">
-  <p2 id="box" >...</p2>
+  <p2 id="box" >HUHUHU</p2>
    <p><style>position: sticky;
     bottom:1px;
     color:black;
     border-radius: 3px;
     background: rgb(184, 221, 175);
     border: 5px solid black;</style></p>
-     <button id="butt" onclick="weiter()">>>></button>
+     <button id="butt" class="weiter" onclick="weiter()">>>></button>
    
  </div></div>
+
+ <button id="myBtn">Open Modal</button>
+<div id="popUp" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>What do you do?</p>
+    <button id="choice1" class="choice">
+    <button id="choice2" class="choice">
+    <button id="choice3" class="choice">
+  </div>
+</div>
 
 <script>
   document.getElementById("oben").innerHTML = window.innerWidth+" "+window.innerHeight;
 
-  let regie = [1, 2, 2, 2, 3, 2,];
-  let inhalt = ["As you can see, these are some delicious feet. ", "I like them a lot. ", "in fact", ", I wanna spit on them ", ":)"];
+  let regie = [1, 4, 3, 2,];
+  let inhalt = ["As you can see, these are some delicious feet. I like them a lot. In fact, I wanna spit on them ", ":)"];
   let textnummer = [0];
   let regienummer = [0];
 
@@ -70,9 +81,30 @@
     if (regie[regienummer] == 2) {
       txt = inhalt[textnummer]; textnummer ++;
     writeText();
-    } else {document.getElementById('figur').src='transparents.png'}} 
+    } else { 
+      if (regie[regienummer] == 3){
+      document.getElementById('figur').src='transparents.png'
+    } else {
+     fun();
+   }}} 
     regienummer ++;
   }
+
+
+var modal = document.getElementById("popUp");
+var btn = document.getElementById("myBtn");
+var span = document.getElementsByClassName("close")[0];
+    btn.onclick = function() {fun(), modal.style.display = "block";
+}
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+function fun() {
+modal.style.display = "inline";
+document.getElementById("choice1").innerHTML = "Fuck you I have something very important to do, run away fast.";
+}
+
 </script>
 </body>
 </html>
