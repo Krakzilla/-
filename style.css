@@ -2,20 +2,35 @@
     width: 100%;
     height: auto;
      position:static;
-}  
+}
+
+/*.backgrounds {
+  width: auto;
+  height: 100%;
+   position:fixed;
+}*/
 
 .stage {
  position: relative;
 user-select: none;
 }
 
-.figur {
+/*.figur {
   position:absolute;
   top: 22%;
   left: 15%;
   z-index: 2;
   width: 70%;
   height: auto;
+}*/
+
+.figur {
+  position:fixed;
+  top: 12%;
+  right: 8%;
+  z-index:2;
+  width: auto;
+  height: 80%;
 }
 
 p2 {
