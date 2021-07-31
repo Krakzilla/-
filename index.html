@@ -31,7 +31,6 @@
 
 <div id="popUp" class="modal">
   <div class="modal-content">
-    <span class="close">&times;</span>
     <p id="popUpTitle">What do you do?</p>
     <button id="choice1" class="choice" onclick="skip(1)">
     <button id="choice2" class="choice" onclick="skip(2)">
@@ -42,10 +41,10 @@
 <script>
   document.getElementById("oben").innerHTML = window.innerWidth+" "+window.innerHeight;
 
-  let regie = [1, 41, 31, 2,0,1,1,1,41];
-  let inhalt = ["As you can see, these are some delicious feet. I like them a lot. In fact, I wanna spit on them ", 0, 0, ":)",0,"Und","noch","mal","GEHEIMGEHEIM"];
+  let regie = [7,6,6,6,2,41,3,3,1,31];
+  let inhalt = ["Well hello there! ", " Huh?", " Get that can outta here!"," right"," now!!!", 0,0,0,"hi svea"];
   let regienummer = [0];
-  let choices = [3, "first answer", "Fine", "Third answer", 2,5,7];
+  let choices = [3, "first answer", "Fine", "Third answer", 7,6,6];
   let startpunktefürchoices = [0, 7, 10];
 
   var choicestart = 0
@@ -59,7 +58,7 @@
      i++;
      setTimeout(type, speed);
    } else {
-    document.getElementById("butt").disabled = false;
+    if (regie[regienummer-1] != 6) {document.getElementById("butt").disabled = false;}
    }
   }
 
@@ -72,6 +71,7 @@
     i = 0;
     type();
   }
+
   function weiter() {
     document.getElementById("oben").innerHTML = regienummer /*regie[regienummer]*/;
   if (regie[regienummer] == 1) {
@@ -84,7 +84,7 @@
     writeText();
     } else { 
       if (regie[regienummer] == 3){
-      document.getElementById('figur').src='transparents.png';
+      document.getElementById('figur').src='';
       txt = inhalt[regienummer]; writeText();
     } else {
      if (regie[regienummer] == 41) {
@@ -94,17 +94,16 @@
       if (regie[regienummer] == 31) {
         document.getElementById('figur').src='t2.png';
       }
-   }} 
+      else { if (regie[regienummer] == 6) {txt = inhalt[regienummer]; writeText();setTimeout(weiter, 800);}
+      else { if (regie[regienummer] == 7) {document.getElementById("box").innerHTML = ""; setTimeout(weiter, 0);}} 
+    }
+    }} 
   }}
   regienummer ++;
 }
 
 
 var modal = document.getElementById("popUp");
-
-span.onclick = function() {
-  modal.style.display = "none";
-}
 
 function fun() {
 modal.style.display = "inline";
@@ -120,6 +119,10 @@ function skip(path){
  regienummer = choices[extra];
  modal.style.display = "none";
  weiter();
+}
+
+function autoweiter(){
+  weiter();
 }
 
 </script>
