@@ -18,7 +18,7 @@
   <img class="figur" id="figur" src="sprite.png";>
 </div>
  <div class="textbox">
-  <p2 id="box" >HUHUHU</p2>
+  <p2 id="box" >( ._. )</p2>
    <p><style>position: sticky;
     bottom:1px;
     color:black;
@@ -29,11 +29,10 @@
    
  </div></div>
 
- <button id="myBtn">Open Modal</button>
 <div id="popUp" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
-    <p>What do you do?</p>
+    <p id="popUpTitle">What do you do?</p>
     <button id="choice1" class="choice" onclick="skip(1)">
     <button id="choice2" class="choice" onclick="skip(2)">
     <button id="choice3" class="choice" onclick="skip(3)">
@@ -46,7 +45,7 @@
   let regie = [1, 41, 31, 2,0,1,1,1,41];
   let inhalt = ["As you can see, these are some delicious feet. I like them a lot. In fact, I wanna spit on them ", 0, 0, ":)",0,"Und","noch","mal","GEHEIMGEHEIM"];
   let regienummer = [0];
-  let choices = [3, "first answer", "Fine", "Third answer", 5,6,7];
+  let choices = [3, "first answer", "Fine", "Third answer", 2,5,7];
   let startpunktefürchoices = [0, 7, 10];
 
   var choicestart = 0
@@ -93,7 +92,7 @@
      }
     else {
       if (regie[regienummer] == 31) {
-        document.getElementById('figur').src='transparents.png';
+        document.getElementById('figur').src='t2.png';
       }
    }} 
   }}
@@ -102,16 +101,14 @@
 
 
 var modal = document.getElementById("popUp");
-var btn = document.getElementById("myBtn");
-var span = document.getElementsByClassName("close")[0];
-    btn.onclick = function() {fun(), modal.style.display = "block";
-}
+
 span.onclick = function() {
   modal.style.display = "none";
 }
 
 function fun() {
 modal.style.display = "inline";
+modal.style.display = "block";
 document.getElementById("choice1").innerHTML = choices[choicestart+1];
 document.getElementById("choice2").innerHTML = choices[choicestart+2];
 document.getElementById("choice3").innerHTML = choices[choicestart+3];
@@ -128,4 +125,3 @@ function skip(path){
 </script>
 </body>
 </html>
-button
