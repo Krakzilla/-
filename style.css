@@ -1,17 +1,3 @@
-/* @media screen and (orientation:portrait) {
-.backgrounds {
-    width: 100%;
-    height: auto;
-     position:static;
-  }}
-@media screen and (orientation:landscape) {
-.backgrounds {
-    height: 100%;
-    width: auto;
-    position: static;
-    padding-left: 50px;
-  }} */
-
 .backgrounds {
     width: 100%;
     height: auto;
