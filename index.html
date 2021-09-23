@@ -9,25 +9,20 @@
    
   </style>
 </head>
-<body {margin: 0; height: 100%; overflow: hidden; } onload="startGame()" style="background-color:rgb(167, 245, 255);">
+<body {margin: 0; height: 100%; overflow: hidden; } onload="startGame()" style="background-color:rgb(255, 255, 255);">
 
 <div>
 <p id="oben">Ich glaub es geht los.</p>
- <div class="stage">
-  <img class="backgrounds" src="feet.jpg" width: 100%; height: 100%;>
-  <img class="figur" id="figur" src="sprite.png";>
-</div>
+  <div class="top">
+  </div>
+  <img class="figur" id="figur" src="room1.jpg">
  <div class="textbox">
   <p2 id="box" >( ._. )</p2>
-   <p><style>position: sticky;
-    bottom:1px;
-    color:black;
-    border-radius: 3px;
-    background: rgb(184, 221, 175);
-    border: 5px solid black;</style></p>
-     <button id="butt" class="weiter" onclick="weiter()">>>></button>
-   
- </div></div>
+  <br>
+  <button id="butt" class="weiter" onclick="weiter()">>>></button>   
+ </div>
+ <!<img class="backgrounds" src="picbg1.png" width: 100%; height: 100%;>->
+</div>
 
 <div id="popUp" class="modal">
   <div class="modal-content">
@@ -41,11 +36,18 @@
 <script>
   document.getElementById("oben").innerHTML = window.innerWidth+" "+window.innerHeight;
 
-  let regie = [7,6,2,1,2,41,1,1,3,31];
-  let inhalt = ["Well hello there! ", " Huh?", " Oh no! Someone left their delicious sprite here."," What are you gonna do with it now"," ???", 0,"Wait, you can't just leave it here! I'll take it",0,"Mhm. Tastes like Bratwurst","Du trinkst die sprite und stibrst, ENDE"];
+  let chapter = 1;
+  let regie = [7,6,6,6,2,41,3,3,1,31];
+  let inhalt = ["Well hello there! ", " Huh?", " Get that can outta here!"," right"," now!!!", 0,0,0,"hi svea"];
   let regienummer = [0];
-  let choices = [3, "Take sprite", "Leave sprite there", "Ask for weather", 6,7,7];
-  let startpunktefürchoices = [0, 7, 10];
+  let choices = [3, "first answer", "Fine", "Third answer", 7,6,6];
+   /* die choicestarts: 0, 7, 10 */
+
+if (chapter  == 1) {
+regie = [7,6,6,2,41,1,5,1,1,41];
+inhalt = [0, "ABER HALLO!", " Du willst doch bestimmt bei einer kleinen Umfrage mitmachen, hab ich recht?"," Hab ich?",1, "Dachte ich mir! LOS GEHT'S!",7,"Was? Wie gemein :( Hey ich bin so suaer auf dich, ich spam dich jetzt voll. Mann. Also echt, wie kannst du es wagen???? Du fette Sau. Du stinkst. Bäh. So äh... was soll ich denn noch sagen? Ah ich weiß was! HEHEHEHHE, HEGUIOSHGIHk hifiosehonohfsi eongoensgi4 75z02395 7zhtesojg eh89w s8m3v nz5wp9snc8twgem vlntw9 h8dtgv nse9n68tuj.   .   .   . Na, wie gefällt dir das?", "Tschüsselchen",1];
+choices = ["Hab ich recht?",2, "Jaaaa", "Neeneenee", 5,7,"Bist du immer noch hier?",3,"Yuppi","Yappi","Yoppi"];
+}
 
   var choicestart = 0
   var i = 0
@@ -58,7 +60,8 @@
      i++;
      setTimeout(type, speed);
    } else {
-    if (regie[regienummer-1] != 6) {document.getElementById("butt").disabled = false;}
+    if (regie[regienummer] == 6) {setTimeout(weiter, 800);} 
+    else {document.getElementById("butt").disabled = false; document.getElementById("butt").style.opacity = 100; }
    }
   }
 
@@ -66,7 +69,7 @@
     document.getElementById("box").innerHTML = "" ;
   }
   function writeText() {
-    document.getElementById("butt").style.background="white";
+    document.getElementById("butt").style.opacity = 0;
     document.getElementById("butt").disabled = true;
     i = 0;
     type();
@@ -87,6 +90,9 @@
       document.getElementById('figur').src='';
       txt = inhalt[regienummer]; writeText();
     } else {
+     if (regie[regienummer] == 5) {
+      regienummer = inhalt[regienummer]; setTimeout(weiter, 0);
+     } else {
      if (regie[regienummer] == 41) {
      fun();
      }
@@ -94,37 +100,39 @@
       if (regie[regienummer] == 31) {
         document.getElementById('figur').src='t2.png';
       }
-      else { if (regie[regienummer] == 6) {txt = inhalt[regienummer]; writeText();setTimeout(weiter, 800);}
+      else { if (regie[regienummer] == 6) {txt = inhalt[regienummer]; writeText();}
       else { if (regie[regienummer] == 7) {document.getElementById("box").innerHTML = ""; setTimeout(weiter, 0);}} 
     }
     }} 
-  }}
+  }}}
   regienummer ++;
 }
 
-
 var modal = document.getElementById("popUp");
-
+/*Popup anzeigen und Wahlmöglichkeiten zuordnen, sichtbar/unsichtbar machen*/
 function fun() {
-modal.style.display = "inline";
 modal.style.display = "block";
+choicestart = inhalt[regienummer];
+document.getElementById("popUpTitle").innerHTML = choices[choicestart-1];
 document.getElementById("choice1").innerHTML = choices[choicestart+1];
-document.getElementById("choice2").innerHTML = choices[choicestart+2];
-document.getElementById("choice3").innerHTML = choices[choicestart+3];
-}
+  document.getElementById("choice2").style.display = "none"; document.getElementById("choice3").style.display = "none";
+  if (choices[choicestart]>1) {
+document.getElementById("choice2").innerHTML = choices[choicestart+2]; document.getElementById("choice2").style.display = "block";
+if (choices[choicestart]>2) {
+document.getElementById("choice3").innerHTML = choices[choicestart+3]; document.getElementById("choice3").style.display = "block";
+}}}
 
 function skip(path){
  /*document.write(path)*/
  extra = (choices[choicestart])+choicestart+path;
  regienummer = choices[extra];
  modal.style.display = "none";
- weiter();
+ weiter(); 
 }
 
 function autoweiter(){
   weiter();
 }
-
 </script>
 </body>
 </html>
