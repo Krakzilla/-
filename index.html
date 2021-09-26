@@ -12,35 +12,34 @@
 <body {margin: 0; height: 100%; overflow: hidden; } onload="startGame()" style="background-color:rgb(255, 255, 255);">
 
 <div>
-<p id="oben">Ich glaub es geht los.</p>
   <div class="top">
+    <p1 id="oben">Ich glaub es geht los.</p1>
   </div>
   <img class="figur" id="figur" src="room1.jpg">
  <div class="textbox">
-  <p2 id="box" >( ._.^ )</p2>
+  <p2 id="box" >( ._. )</p2>
   <br>
-  <button id="butt" class="weiter" onclick="weiter()">>>></button>   
+  <button id="butt" class="weiter" onclick="weiter()">>>></button>
+    <div class="modal-content" id="popUp">
+      <p id="popUpTitle">What do you do?</p>
+      <button id="choice1" class="choice" onclick="skip(1)">
+      <button id="choice2" class="choice" onclick="skip(2)">
+      <button id="choice3" class="choice" onclick="skip(3)">
+    </div>
  </div>
  <!<img class="backgrounds" src="picbg1.png" width: 100%; height: 100%;>->
-</div>
-
-<div id="popUp" class="modal">
-  <div class="modal-content">
-    <p id="popUpTitle">What do you do?</p>
-    <button id="choice1" class="choice" onclick="skip(1)">
-    <button id="choice2" class="choice" onclick="skip(2)">
-    <button id="choice3" class="choice" onclick="skip(3)">
-  </div>
 </div>
 
 <script>
   document.getElementById("oben").innerHTML = window.innerWidth+" "+window.innerHeight;
 
-  let chapter = 1;
-  let regie = [7,6,6,6,2,41,3,3,1,31];
-  let inhalt = ["Well hello there! ", " Huh?", " Get that can outta here!"," right"," now!!!", 0,0,0,"hi svea"];
+  let chapter = 0;
+  let regie = [7,6,6,31,6,6,2,6,6,2,6,6,31,6,6,2,6,41,7,7,6,6,31,7,6];
+  let inhalt = [0, " Oh hallo. Komm ruhig näher.", " Ich tu dir nichts ;)","gerold.png"," Guck dir doch den netten Hamster an.", " Ich glaube, er mag dich.",
+  " Also",", Mensch",/*9*/", den ich jetzt FRESSEN werde!"," War nur Spaß ;)"," Du kleiner Angsthase, du solltest dich mal sehen.", " HA!","baby.png"," So siehst du aus:"," Wie ein Baby!"," Na, hast du da etwas zu zu sagen?"," Kleiner Mann?",1,
+"0","Hey du kleiner Fettwanst! Warum hast du mich VOLLGEKOTZT?? ",0,"Dummes Baby. Der Hamster soll dich fressen","gerold.png",0,"*YAMYAM*"];
   let regienummer = [0];
-  let choices = [3, "first answer", "Fine", "Third answer", 7,6,6];
+  let choices = ["Was ist denn?",3, "Gugu Gaga!", "Ululululululu!", "Brabbel brabbel, SPUCK!", 19,19,18];
    /* die choicestarts: 0, 7, 10 */
 
 if (chapter  == 1) {
@@ -98,7 +97,7 @@ choices = ["Hab ich recht?",2, "Jaaaa", "Neeneenee", 5,7,"Bist du immer noch hie
      }
     else {
       if (regie[regienummer] == 31) {
-        document.getElementById('figur').src='t2.png';
+        document.getElementById('figur').src=inhalt[regienummer];
       }
       else { if (regie[regienummer] == 6) {txt = inhalt[regienummer]; writeText();}
       else { if (regie[regienummer] == 7) {document.getElementById("box").innerHTML = ""; setTimeout(weiter, 0);}} 
@@ -111,7 +110,9 @@ choices = ["Hab ich recht?",2, "Jaaaa", "Neeneenee", 5,7,"Bist du immer noch hie
 var modal = document.getElementById("popUp");
 /*Popup anzeigen und Wahlmöglichkeiten zuordnen, sichtbar/unsichtbar machen*/
 function fun() {
-modal.style.display = "block";
+  document.getElementById("butt").style.opacity = 0;
+    document.getElementById("butt").disabled = true;
+modal.style.display ="block";
 choicestart = inhalt[regienummer];
 document.getElementById("popUpTitle").innerHTML = choices[choicestart-1];
 document.getElementById("choice1").innerHTML = choices[choicestart+1];
