@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <title>Simsim</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+  <style>
+    body {background-color: powderblue;}
+    h1 {color: red;}
+    p {color: rgb(131, 102, 159);}
+  </style> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="style.css" rel="stylesheet" type="text/css"/>
+</head>
+<div class="hud">
+  <div class="gamelog" id="gamelog">
+    >Hier sind Informationen.<
+  </div>
+  <div class="buttons">
+     <button onclick="verb('gucken')">Gucken</button>
+       <button onclick="verb('machen')">Machen</button>
+       <div class="secretverbs" id="machen">
+        <button onclick="moveTo(hamsta1,room1)">Gehinraum1</button>
+        <button onclick="moveTo(hamsta1,room2)">Gehinraum2</button>
+       </div>
+       <div class="secretverbs" id="gucken">
+        <button onclick="inspectSelf()">Inspect Self</button>
+        <button onclick="inspectRoom()">Look Around</button>
+       </div>
+ </div>
+</div>
+
+
+<script>
+
+let asound = new Audio('furz.mp3');
+let hamsta1 = new Ding("Hubert","hamsta1");
+let menu1 = "nuscht";
+let menus = [];
+
+function Ding(name,bezeichner){
+    this.name = name;
+    this.tags = ["unhoeflich", "klein"];
+    this.size = 172
+    this.likes = ["Brot"]
+    this.id = bezeichner
+
+    this.status = function(){
+      return "Ich will "+this.likes[0]+". Und ich bin "+this.gewicht+".";
+    }
+}
+
+let room1 = ['Wohnzimmer','hamsta1'];
+let room2 = ['hässliche kleine Besenkammer'];
+let room3 = ['Raum 3'];
+
+function write(text, color) {
+  if (typeof color === 'undefined') {
+  document.getElementById("gamelog").innerHTML +="\n"+text;
+} else {document.getElementById("gamelog").innerHTML +="\n"+"<span style="+"\"color:"+color+"\""+">"+text+"</span>";
+}document.getElementById("gamelog").scrollTop = document.getElementById("gamelog").scrollHeight;
+}
+
+function emptyGameLog() {
+  document.getElementById("gamelog").innerHTML ="*start of gamelog*\n";
+}
+function startGame(){
+  emptyGameLog();
+  write("Hallo, \n  "+ hamsta1.status());
+  hamsta1.variableVonAussen = "Wert von außen!!";
+}
+
+function roomWith(gesuchtesDing){
+  if (room1.indexOf(gesuchtesDing)==1) {return room1;} else {
+  if (room2.indexOf(gesuchtesDing)==1) {return room2;} else {
+  if (room3.indexOf(gesuchtesDing)==1) {return room3;}}}
+}
+
+//player actions
+function inspectSelf(){
+  write("*"+hamsta1.name+", "+hamsta1.size+" cm tall and smelly like the bitch he is.");
+}
+function inspectRoom(){
+  write("*Du bist in "+roomWith('hamsta1')[0]);
+}
+function moveTo(verschobenesDing,raum){ write(room1+room2,"grey");
+    let dingBezeichner = verschobenesDing.id;
+  if(raum.indexOf(dingBezeichner)==1) {write("*"+verschobenesDing.name+" ist schon in "+raum[0]);}
+   else {write("...verschieben...","red");{roomWith(dingBezeichner).splice(roomWith(dingBezeichner).indexOf(dingBezeichner), 1); raum.push(dingBezeichner); write("*"+verschobenesDing.name+" ist jetzt in "+raum[0])}
+  }
+  write(room1+" - "+room2,"grey");
+}
+//Geräusch
+		function playSound() {
+			asound.play();}
+
+    window.addEventListener('keydown', (event) => {
+        if (event.key === 'a' ) {playSound(); write("\nBlablablu\nBlablablub");}
+    })
+
+//dropdown menu
+function verb(seSe) {
+  if (menu1==seSe) {
+    document.getElementById(seSe).style.display = "none"; menu1="nuscht";} 
+    else { if (menu1=="nuscht") {document.getElementById(seSe).style.display = "block"; menu1=seSe;}
+    else {document.getElementById(menu1).style.display = "none";
+    document.getElementById(seSe).style.display = "block"; menu1=seSe;}
+    }
+}
+
+
+startGame();
+</script>
+</html>
