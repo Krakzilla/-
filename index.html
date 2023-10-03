@@ -1,113 +1,394 @@
 <!DOCTYPE html>
-<html lang="de">
-<head>
-  <title>Simsim</title>
-  <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
-  <style>
-    body {background-color: powderblue;}
-    h1 {color: red;}
-    p {color: rgb(131, 102, 159);}
-  </style> 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="style.css" rel="stylesheet" type="text/css"/>
-</head>
-<div class="hud">
-  <div class="gamelog" id="gamelog">
-    >Hier sind Informationen.<
-  </div>
-  <div class="buttons">
-     <button onclick="verb('gucken')">Gucken</button>
-       <button onclick="verb('machen')">Machen</button>
-       <div class="secretverbs" id="machen">
-        <button onclick="moveTo(hamsta1,room1)">Gehinraum1</button>
-        <button onclick="moveTo(hamsta1,room2)">Gehinraum2</button>
-       </div>
-       <div class="secretverbs" id="gucken">
-        <button onclick="inspectSelf()">Inspect Self</button>
-        <button onclick="inspectRoom()">Look Around</button>
-       </div>
- </div>
-</div>
+<html lang="ger">
+  <head>
+    <meta charset="utf-8" />
+    <title>pop</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      canvas {
+        background: #eee;
+        display: block;
+        margin: 0 auto;
+        width: 95%;
+        border: 4px solid red;
+        image-rendering: pixelated;
+      }
+
+      html, body {
+       width:  100%;
+       height: 100%;
+       margin: 0;
+       background-color: rgb(0, 0, 0);
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="stage" width="500" height="800"></canvas>
+    <canvas style="display: none" id="offscreenCanvas1" width="250" height="400"></canvas>
+    <canvas style="display: none" id="offscreenCanvas2" width="250" height="400"></canvas>
+    <p id="infozeile"></p>
+    <script>
+      const canvas2 = document.getElementById("offscreenCanvas2");
+      const ctx2 = canvas2.getContext("2d");
+      ctx2.lineWidth = 1.5;
+      const canvas1 = document.getElementById("offscreenCanvas1");
+      const ctx1 = canvas1.getContext("2d");
+      ctx1.lineWidth = 3;
+      const canvas = document.getElementById("stage");
+      const ctx = canvas.getContext("2d");
+      ctx.lineWidth = 3;
+      let x = 120;
+      let y = 195;
+      let xbg= 0;
+      let ybg= 0;
+      let scrollBg = -800
+      let verschiebung1x;
+      let verschiebung1y;
+      let alty;
+      let altx;
+      let altplayhohe;
+      let rightPressed = false;
+      let leftPressed = false;
+      let upPressed = false;
+      let downPressed = false;
+      let spacePressed = false;
+      let aPressed = false;
+      let speed = 0.5;
+      let speedvert = Math.round(Math.sqrt((speed*speed)/2));
+      let tacho = 1;
+      let beideAchsen;
+      let kopfX=0;
+      let kopfY=0;
+      let bauchX = 0;
+      let bauchY = 0;
+      let brems = 0.2;
+      let maxspeed = 5
+      let hohe2;
+      let playhohe = 0;
+      let hintergrund = new Image();
+      let i;
+      let d=1;
+      let invincibility = 0
+      let animCoolDown = 0
+      let idleCoolDown= 100
+      let faces = ['./kopf1.png','./kopf1hurt2.png','./kopf1hurt1.png']
+      let lives = 3
+      let nextFrame= 0
+      let killer = "Aufschlitzer38."
+      let message = "FORTNITE 2"
+      hintergrund.src = './grass.jpg'
+      let fred = new Image();
+      fred.src = './fred.png'
+      let frauk = new Image();
+      frauk.src = './frauk.png'
+      let flip = new Image();
+      flip.src = './flip.png'
+      let me = new Image();
+      me.src = './korper.png'
+      let kopf = new Image();
+      kopf.src = './kopf1.png'
+      let effect = new Image();
+      const area = [50,50, 100,50, 100,100, 50,100, 100,100, 200,100, 200,150, 100,150] //buildLevel geht seltsam mit koordinaten um
+      let projektile = []
+      let ereignisse = [] //v. rechts nach links
+      let activeBadies = []//v. links nach rechts
+      let badieListe = [fred,250,0,15,0,6,50,2,'grey',fred,100,0,15,0,6,70,1,'yellow',flip,50,0,15,15,6,30,10,'yellow',flip,100,0,15,0,6,70,1,'yellow',fred,400,0,20,-5,6,70,1,'yellow',fred,300,0,20,-5,6,70,1,'yellow',fred,200,0,5,0,30,200,1,'yellow',frauk,100,0,15,15,6,70,1,'yellow',frauk,200,0,15,15,6,70,1,'yellow'] //v. links nach rechts
+      
+      function liveses(){
+        if (lives<1){clearInterval(timer); 
+      ctx.clearRect(0, 0, 500, 800); message="Ermordet von: "+killer+""; ctx.font = "40px Arial"; if (ybg>1800) {message="Kaufe Vbucks"};
+      setTimeout(title,4000); console.log("ggg")}
+      }
+      function addBullet(krx,kry,krr,krspeedx,krspeedy){
+        projektile.push(krx+krspeedx*15,kry+krspeedy*15,krr,krspeedx,krspeedy)
+      }
+      function moveBullets(){ // löscht sie auch automatisch
+        i=1 
+        while (i<projektile.length){
+        projektile.splice(i,1,projektile[i]+projektile[i+3]); 
+        if(projektile[i]>800 || projektile[i]<0){projektile.splice(i-1,5)} else {
+          projektile.splice(i-1,1,projektile[i-1]+projektile[i+2]);
+          if(projektile[i-1]>500 || projektile[i-1]<0){projektile.splice(i-1,5)}
+        } if (invincibility>0){ invincibility -=1} else {
+        if ((projektile[i]>y-40-projektile[i+2]) && (projektile[i]<y+40+projektile[i+2])){
+        if ((projektile[i-1]>x-40-projektile[i+2]) && (projektile[i-1]<x+40+projektile[i+2])){{projektile.splice(i-1,5);
+        lives-=1; invincibility=50; kopf.src = faces[lives]; liveses(); effect.src = './effectAugen.png'; animCoolDown=50
+        }}}}
+        i+=5}
+      }
+
+      
+      function buildLevel1(){
+        //ctx1.strokeRect(x,y,150,150);
+        i = area.length;
+        ren = 0;
+        while (ren<i){
+          ctx1.strokeRect(area[ren], area[ren+1], area[ren+4]-area[ren], area[ren+5]-area[ren+1]);
+          ren += 8;
+        }     
+      }
+
+      function buildLevel2(){
+        ctx2.fillStyle= "rgb(100, 200, 200)";
+        i = area.length
+        ren = 0;
+        while (ren<i) {
+          ctx2.fillRect(area[ren]+50, area[ren+1]-24, area[ren+4]-area[ren], area[ren+5]-area[ren+1]);
+          ren += 8;
+        }
+      }
+
+      function quader(posx,posy,breite,tiefe,hohe,boden){ //nicht verwendet
+        //ctx.strokeRect(posx-x,posy-y,breite,tiefe);
+        
+        let h = boden - playhohe;
+        verschX = 200-x*h+(posx-200)*h;
+        verschY = 125-y*h+(posy-125)*h;
+        perhohe = (perspective+perspective/h)*h;
+        ctx.strokeRect(verschX+(breite*h-(breite*perhohe))/2, verschY+(tiefe*h-(tiefe*perhohe))/2, breite*perhohe, tiefe*perhohe)
+      
+        h = hohe - playhohe;
+        verschX = 200-x*h+(posx-200)*h;
+        verschY = 125-y*h+(posy-125)*h;
+        perhohe = (perspective+perspective/h)*h;
+        ctx.fillStyle = "blue", lineWidth=2;
+        //ctx.strokeRect(200-x*hohe+(posx-200)*hohe, 125-y*hohe+(posy-125)*hohe, breite*hohe, tiefe*hohe)  
+        ctx.strokeRect(verschX+(breite*h-(breite*perhohe))/2, verschY+(tiefe*h-(tiefe*perhohe))/2, breite*perhohe, tiefe*perhohe)
+      }
 
 
-<script>
 
-let asound = new Audio('furz.mp3');
-let hamsta1 = new Ding("Hubert","hamsta1");
-let menu1 = "nuscht";
-let menus = [];
+      function quaderFullen(x1,y1,x2,y2){
+        ctx.beginPath();
+        ctx.moveTo(x+area[x1],y+area[y1]);
+        ctx.lineTo((area[x1])*hohe2+verschiebung1x,(area[y1])*hohe2+verschiebung1y)
+        ctx.lineTo((area[x2])*hohe2+verschiebung1x,(area[y2])*hohe2+verschiebung1y);
+        ctx.lineTo(x+area[x2],y+area[y2]);
+        ctx.fill();
+      }
+      
+      function drawBullets(){
+        i=1
+        while (i<projektile.length){
+          ctx.beginPath();
+          ctx.arc(projektile[i-1], projektile[i], projektile[i+1], 0, 2 * Math.PI);
+          ctx.fill();
+          i+=5
+        }
+      }
 
-function Ding(name,bezeichner){
-    this.name = name;
-    this.tags = ["unhoeflich", "klein"];
-    this.size = 172
-    this.likes = ["Brot"]
-    this.id = bezeichner
+      function drawBadies(){
+        i=(activeBadies.length-1)*9 //0/9∞
+        while (i>-1){
+          ctx.drawImage(badieListe[i],badieListe[i+1]-70,badieListe[i+2])
+          //bulletsspawnenwennnötig
+          if (ybg % badieListe[i+6] == 0) {console.log("schuss");addBullet(badieListe[i+1],badieListe[i+2], badieListe[i+3],badieListe[i+4],badieListe[i+5])}
+          //bewegen, löschen. badieListe = [fred,250,0,15,0,6,50,2] (krx,kry,krr,krspeedx,krspeedy)
+          badieListe.splice(i+2,1,badieListe[i+2]+badieListe[i+7]);
+          if (badieListe[i+2]>800){console.log("tschö");activeBadies.splice(i/9, 1); badieListe.splice(i,9)};
+          badieListe.splice(i+1,1,badieListe[i+1]+badieListe[i+4]);
+          //kollision,löschen
+          if ((badieListe[i+2]>y-80)&&(badieListe[i+2]<y+80)&&(badieListe[i+1]>x-80)&&(badieListe[i+1]<y+80))
+          {
+            activeBadies.splice(i/9, 1); badieListe.splice(i,9);
+            effect.src = './effectSchnapp.png'; animCoolDown=15; nextFrame='kau'}
+          
+          i-=9         
+        }}
 
-    this.status = function(){
-      return "Ich will "+this.likes[0]+". Und ich bin "+this.gewicht+".";
-    }
-}
+      function draw() {
+        ctx.clearRect(0, 0, 500, 800);
+        scrollBg +=1; if (scrollBg>0){scrollBg=-800}
+        ctx.drawImage(hintergrund,0,scrollBg);
+        ctx.fillStyle = "grey";
+        drawBullets();
+        drawBadies();
+        ctx.drawImage(me,x-37,y-19)
+        ctx.fillStyle = "rgb(50, 50, 50)";
+        ctx.drawImage(kopf,x+kopfX*tacho-48,y+kopfY*tacho-140)
+        ctx.drawImage(effect,x+kopfX*tacho-48,y+kopfY*tacho-140)
+        //hohe2 = 1.5-playhohe;
+        //ctx.drawImage(canvas1,xbg+50,ybg-24);
 
-let room1 = ['Wohnzimmer','hamsta1'];
-let room2 = ['hässliche kleine Besenkammer'];
-let room3 = ['Raum 3'];
+        /*ctx.fillStyle = "rgb(50, 168, 189)";
+        quaderFullen(0,1,2,3)
+        quaderFullen(2,3,4,5)
+        quaderFullen(4,5,6,7)
+        quaderFullen(0,1,6,7)*/
+        
+        ctx.drawImage(canvas2,xbg*hohe2-200*(hohe2-1),ybg*hohe2-130*(hohe2-1),250*hohe2,400*hohe2) //600,375
+        //quader(300,0,80,80,1.5,1);
+      }
 
-function write(text, color) {
-  if (typeof color === 'undefined') {
-  document.getElementById("gamelog").innerHTML +="\n"+text;
-} else {document.getElementById("gamelog").innerHTML +="\n"+"<span style="+"\"color:"+color+"\""+">"+text+"</span>";
-}document.getElementById("gamelog").scrollTop = document.getElementById("gamelog").scrollHeight;
-}
+      function collisionCheckX() {
+        //obejkt1
+        if (((x>area[0]) && (x<area[2])) && ((y>area[1]) && (y<area[5]))) {
+          if ((x>area[0]) && (x<area[2])) {
+            if(Math.abs(area[2]-altx)>Math.abs(area[0]-altx)){
+              x = area[0]-1} else x = area[2]+1;}
+        }
+      }
+      function collisionCheckY() {
+        //obejkt1
+        if (((x>area[0]) && (x<area[2])) && ((y>area[1]) && (y<area[5]))) {
+          if ((y>area[1]) && (y<area[5])) {
+            if(Math.abs(area[5]-alty)>Math.abs(area[1]-y)){
+              y = area[1]-1} else y = area[5]+1; console.log("kollision")}
+        }
+      }
 
-function emptyGameLog() {
-  document.getElementById("gamelog").innerHTML ="*start of gamelog*\n";
-}
-function startGame(){
-  emptyGameLog();
-  write("Hallo, \n  "+ hamsta1.status());
-  hamsta1.variableVonAussen = "Wert von außen!!";
-}
+      function speedrechner(){
+        return Math.abs(Math.sqrt(bauchX**2+bauchY**2))
+      }
+      function gleichmassigTempoMod(mod){
+        beideAchsen = Math.abs(bauchX)+Math.abs(bauchY)
+        if (bauchX>0){bauchX -= mod/beideAchsen*Math.abs(bauchX); if(bauchX<0){bauchX=0}} else if (bauchX<0){bauchX += mod/beideAchsen*Math.abs(bauchX); if(bauchX>0){bauchX=0}}
+        if (bauchY>0){bauchY -= mod/beideAchsen*Math.abs(bauchY); if(bauchY<0){bauchY=0}} else if (bauchY<0){bauchY += mod/beideAchsen*Math.abs(bauchY); if(bauchY>0){bauchY=0}}
+      }
 
-function roomWith(gesuchtesDing){
-  if (room1.indexOf(gesuchtesDing)==1) {return room1;} else {
-  if (room2.indexOf(gesuchtesDing)==1) {return room2;} else {
-  if (room3.indexOf(gesuchtesDing)==1) {return room3;}}}
-}
+      function moveKopf() {
+        if (rightPressed) {kopfX=1;kopfY=0; if(upPressed){kopfX=0.707;kopfY=-0.707;}else if (downPressed){kopfX=0.707;kopfY=0.707;}}
+        else if (leftPressed){ kopfX=-1;kopfY=0; if(upPressed){kopfX=-0.707;kopfY=-0.707}else if (downPressed){kopfX=-0.707;kopfY=0.707}}
+        else if (upPressed){kopfX=0;kopfY=-1}
+        else if (downPressed) {kopfX=0;kopfY=1 
+//kopf gleitet zurück wenn keine taste mehr gedrückt
+        }else if((rightPressed||leftPressed||upPressed||downPressed)==false)
+        {
+        if (Math.abs(kopfX)>0.1){kopfX=kopfX/2}else kopfX=0; if(Math.abs(kopfY)>0.1){kopfY=kopfY/2}else kopfY=0;}
+      }
 
-//player actions
-function inspectSelf(){
-  write("*"+hamsta1.name+", "+hamsta1.size+" cm tall and smelly like the bitch he is.");
-}
-function inspectRoom(){
-  write("*Du bist in "+roomWith('hamsta1')[0]);
-}
-function moveTo(verschobenesDing,raum){ write(room1+room2,"grey");
-    let dingBezeichner = verschobenesDing.id;
-  if(raum.indexOf(dingBezeichner)==1) {write("*"+verschobenesDing.name+" ist schon in "+raum[0]);}
-   else {write("...verschieben...","red");{roomWith(dingBezeichner).splice(roomWith(dingBezeichner).indexOf(dingBezeichner), 1); raum.push(dingBezeichner); write("*"+verschobenesDing.name+" ist jetzt in "+raum[0])}
-  }
-  write(room1+" - "+room2,"grey");
-}
-//Geräusch
-		function playSound() {
-			asound.play();}
+      function moveMe() {
+        altx = x;
+        alty = y;
+        altplayhohe = playhohe;
 
-    window.addEventListener('keydown', (event) => {
-        if (event.key === 'a' ) {playSound(); write("\nBlablablu\nBlablablub");}
-    })
+//kopfbewegen
+        moveKopf()
+//drift        
+        if (aPressed && drift==0) {d= Math.sqrt((x*x)+(y*y)); drift = 1;console.log("driftstart")} 
+//bauch wird beeinflusst
+       // bauchY += kopfY/(1+Math.abs(bauchY)); bauchX += kopfX/(1+Math.abs(bauchX));
+        bauchY += kopfY/2; bauchX += kopfX/2;
+//winkelbasierend bremsen
+        gleichmassigTempoMod(brems);
+//winkelbasiertes tempolimit
+        tacho = speedrechner()
+        if (tacho>maxspeed){gleichmassigTempoMod(tacho-maxspeed)}
+      
+//veränderung anwenden+kollision
 
-//dropdown menu
-function verb(seSe) {
-  if (menu1==seSe) {
-    document.getElementById(seSe).style.display = "none"; menu1="nuscht";} 
-    else { if (menu1=="nuscht") {document.getElementById(seSe).style.display = "block"; menu1=seSe;}
-    else {document.getElementById(menu1).style.display = "none";
-    document.getElementById(seSe).style.display = "block"; menu1=seSe;}
-    }
-}
+        y += bauchY; collisionCheckY();
+        x += bauchX; collisionCheckX();}
+        if (x>350){x=-300}else if (x<-300){x=350}
+      
 
 
-startGame();
-</script>
+      function tick (){
+        if (ereignisse[ereignisse.length-1]==ybg){activeBadies.push(ereignisse.pop())} //badies spawnen
+        if (ybg%600 ==0) {    addBullet(x,-10,15,0,2); addBullet(x+50,-10,20,0.5,2); addBullet(x+50,-10,20,0,1)}
+        moveMe();;
+        moveBullets();
+        ybg+=2
+        animCoolDown -=1; if (animCoolDown == 0){effect.src = './effectLeer.png';
+        if (nextFrame=='kau') {nextFrame=0; animCoolDown=20, effect.src= './effectKau.png'; console.log("kau")}}
+        idleCoolDown -=1; if ((idleCoolDown<1) && (animCoolDown<1)) {effect.src = './effectBlink.png'; idleCoolDown =100; animCoolDown = 5}
+        draw();
+        document.getElementById("infozeile").innerHTML = ""+ybg+" & "+y+" & "+"ja"
+        //{clearInterval(timer)}
+      }
+
+      document.addEventListener("keydown", keyDownHandler, false);
+      document.addEventListener("keyup", keyUpHandler, false);
+      function keyDownHandler(e) {
+        if (e.key === "Right" || e.key === "ArrowRight") {
+            rightPressed = true;
+        } else if (e.key === "Left" || e.key === "ArrowLeft") {
+            leftPressed = true;
+        }
+        if (e.key === "Up" || e.key === "ArrowUp") {
+            upPressed = true;
+        } else if (e.key === "Down" || e.key === "ArrowDown") {
+            downPressed = true;
+        }
+        if (e.key === " ") {
+            spacePressed = true;
+        }
+        if (e.key === "a") {
+            aPressed = true;
+        }
+      }
+
+        function keyUpHandler(e) {
+        if (e.key === "Right" || e.key === "ArrowRight") {
+            rightPressed = false;
+        } else if (e.key === "Left" || e.key === "ArrowLeft") {
+            leftPressed = false;
+        }
+        if (e.key === "Up" || e.key === "ArrowUp") {
+            upPressed = false;
+        } else if (e.key === "Down" || e.key === "ArrowDown") {
+            downPressed = false;
+        }
+        if (e.key === " ") {
+            spacePressed = false;
+        }
+        if (e.key === "a") {
+            aPressed = false;
+        }
+      }
+      let ren = 0;
+      //pushArea();
+      var timer = 0
+
+      function start(){
+      lives = 3;
+      ereignisse = [2300,2000,1600,1300,1120,1110,1100,1000,700,500,200]; //rechts nach links
+      buildLevel1(); //BODEN ctx1 Offscreencanvas1
+      buildLevel2(); //ERSTER STOCK ctx2 Offscreencanvas2
+      timer = setInterval(tick, 15)
+      }
+
+      ctx.font = "75px Arial";
+
+      function scroll(){
+      if (i<150){
+      if (spacePressed){kopfX=10}
+      ctx.clearRect(0, 0, 500, 300);
+      ctx.fillText(message, 10, i)
+      i+=kopfX; if (i>149){kopfX=5}
+      }else{
+      if (x>250) {
+        if (spacePressed){kopfX=20}
+        ctx.clearRect(0, 400, 500, 400);
+        x-=kopfX
+        ctx.drawImage(me,x-37,y-19)
+        ctx.drawImage(kopf,x-48,y-140)
+      }else if (i!=1000){
+        x=249;
+        ctx.font = "30px Arial";
+      if (i<151){ctx.fillText("Fynns Amoklauf", 10, 400)} else {ctx.fillText("Dein Skin ist Fynn.", 10, 400)}
+      i=1000;
+      }else if (spacePressed){clearInterval(scrolli);setTimeout (start, 10)};
+        x-=0.001; if (x<248.8 && i==1000){ctx.font = "100px Arial"; ctx.fillText("SPACE", 10, 350)}}
+      }
+
+      let scrolli= 0
+
+      function title (){
+      i=-10;
+      kopfX=1
+      x=600;y=650;
+      scrolli=setInterval(scroll,30)}
+      
+      title()
+
+      //IDEE: Festhalten: Falls an Stange-> Rotation, Falls and Wand -> Möglichkeit zum ABdrücken
+      //Bewegliche Blöcke als Hindernisse, evt nur tw verschiebbar-> werden zum Urpsprung zurückgezogen
+      //Schleuderblock: Kann geschoben werden wie Gummiband und schießt dann zurück, gibt Boost
+    </script>
+  </body>
 </html>
+
